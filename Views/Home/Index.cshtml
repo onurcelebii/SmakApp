@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6 text-center">
+            @if (ViewData["UserEmail"] != null)
+            {
+                <p class="mb-3">Hoş geldiniz, @ViewData["UserName"]!</p>
+                <p>Şirket Adı: @ViewData["CompanyName"]</p>
+                <p>Şirket Bakiyesi: @ViewData["CompanyBalance"] TL</p>
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Çıkış Yap</a>
+                <a href="@Url.Action("Invite", "Account")" class="btn btn-primary">Davet Et</a>
+                <a href="@Url.Action("Product", "Home")" class="btn btn-success">Ürünler</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary mr-2">Giriş Yap</a>
+                <a href="@Url.Action("Register", "Account")" class="btn btn-secondary">Kayıt Ol</a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Toast Bileşeni -->
+@if (TempData["LoginMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast" id="loginToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bilgilendirme</strong>
+                <small class="text-muted">Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["LoginMessage"]
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData["LogoutMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast" id="logoutToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bilgilendirme</strong>
+                <small class="text-muted">Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["LogoutMessage"]
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData["RegisterMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast" id="registerToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bilgilendirme</strong>
+                <small class="text-muted">Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["RegisterMessage"]
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Bootstrap ve JavaScript Kodları -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var loginToast = document.getElementById('loginToast');
+        if (loginToast) {
+            var toast = new bootstrap.Toast(loginToast);
+            toast.show();
+            setTimeout(function () {
+                toast.hide();
+            }, 3000);
+        }
+
+        var logoutToast = document.getElementById('logoutToast');
+        if (logoutToast) {
+            var toast = new bootstrap.Toast(logoutToast);
+            toast.show();
+            setTimeout(function () {
+                toast.hide();
+            }, 3000);
+        }
+
+        var registerToast = document.getElementById('registerToast');
+        if (registerToast) {
+            var toast = new bootstrap.Toast(registerToast);
+            toast.show();
+            setTimeout(function () {
+                toast.hide();
+            }, 3000);
+        }
+    });
+</script>

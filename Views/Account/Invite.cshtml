@@ -1,0 +1,56 @@
+﻿@model SmakApp.Models.InviteViewModel
+
+<h1>Kullanıcı Davet Et</h1>
+
+@if (ViewData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @ViewData["Message"]
+    </div>
+}
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="Invite" method="post">
+    <div class="form-group">
+        <label for="Email">Davet Edilecek Kullanıcının E-Posta Adresi</label>
+        <input type="email" class="form-control" id="Email" name="email" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Davet Et</button>
+</form>
+
+<!-- Bootstrap Toast Bileşeni -->
+@if (TempData["InviteMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast" id="inviteToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bilgilendirme</strong>
+                <small class="text-muted">Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["InviteMessage"]
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Bootstrap ve JavaScript Kodları -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var inviteToast = document.getElementById('inviteToast');
+        if (inviteToast) {
+            var toast = new bootstrap.Toast(inviteToast);
+            toast.show();
+            setTimeout(function () {
+                toast.hide();
+            }, 3000);
+        }
+    });
+</script>

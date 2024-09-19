@@ -1,0 +1,147 @@
+﻿@model SmakApp.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Ürünler";
+}
+
+<div class="container mt-5">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ürün Adı</th>
+                        <th>Açıklama</th>
+                        <th>Fiyat</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>@product.Price</td>
+                            <td>
+                                <!-- Düzenleme butonu -->
+                                <a href="@Url.Action("EditProduct", new { id = product.Id })" class="btn btn-warning">Düzenle</a>
+
+                                <!-- Silme butonu -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="@product.Id">Sil</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h2>Yeni Ürün Ekle</h2>
+            <form id="addProductForm" asp-action="AddProduct" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Ürün Adı</label>
+                    <input type="text" class="form-control" id="name" name="Name" required />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Açıklama</label>
+                    <input type="text" class="form-control" id="description" name="Description" required />
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Fiyat</label>
+                    <input type="number" class="form-control" id="price" name="Price" step="0.01" required />
+                </div>
+                <button type="button" class="btn btn-primary" id="addProductBtn">Ekle</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Ekleme Onay Popup -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Onay</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Eklemek istediğinize emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="confirmAddBtn">Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Onay Popup -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Onay</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Silmek istediğinize emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Evet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap ve JavaScript Kodları -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addProductForm = document.getElementById('addProductForm');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const confirmAddBtn = document.getElementById('confirmAddBtn');
+
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        let deleteForm;
+
+        // Ekleme işlemi için buton tıklama olayı
+        addProductBtn.addEventListener('click', function () {
+            const addModal = new bootstrap.Modal(document.getElementById('addModal'));
+            addModal.show();
+        });
+
+        confirmAddBtn.addEventListener('click', function () {
+            addProductForm.submit();
+        });
+
+        // Silme işlemi için buton tıklama olayı
+        document.querySelectorAll('button[data-bs-target="#deleteModal"]').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+                deleteForm = document.createElement('form');
+                deleteForm.method = 'post';
+                deleteForm.action = '@Url.Action("DeleteProduct", "Home")';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'productId';
+                input.value = productId;
+
+                deleteForm.appendChild(input);
+                document.body.appendChild(deleteForm);
+                deleteModal.show();
+            });
+        });
+
+        confirmDeleteBtn.addEventListener('click', function () {
+            if (deleteForm) {
+                deleteForm.submit();
+            }
+        });
+    });
+</script>

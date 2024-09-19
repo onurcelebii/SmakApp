@@ -1,0 +1,26 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Ürün Düzenle";
+}
+
+<div class="container mt-5">
+    <h1>@ViewData["Title"]</h1>
+
+    <form asp-action="UpdateProduct" method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="mb-3">
+            <label for="name" class="form-label">Ürün Adı</label>
+            <input type="text" class="form-control" id="name" name="Name" value="@Model.Name" required />
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Açıklama</label>
+            <input type="text" class="form-control" id="description" name="Description" value="@Model.Description" required />
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Fiyat</label>
+            <input type="number" class="form-control" id="price" name="Price" value="@Model.Price" step="0.01" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+    </form>
+</div>

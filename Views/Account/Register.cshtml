@@ -1,0 +1,75 @@
+﻿@model SmakApp.Models.RegisterViewModel
+
+<h1>Kayıt Ol</h1>
+
+@if (ViewData["RegisterMessage"] != null)
+{
+    <div class="alert alert-success">
+        @ViewData["RegisterMessage"]
+    </div>
+}
+
+@if (TempData["InviteMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div class="toast" id="inviteToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bilgilendirme</strong>
+                <small class="text-muted">Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["InviteMessage"]
+            </div>
+        </div>
+    </div>
+}
+
+<form asp-action="Register" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Kullanıcı İsim</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email">E-posta</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password">Şifre</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanyName">Şirket</label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Balance">Bakiye</label>
+        <input asp-for="Balance" class="form-control" />
+        <span asp-validation-for="Balance" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+</form>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var inviteToast = document.getElementById('inviteToast');
+        if (inviteToast) {
+            var toast = new bootstrap.Toast(inviteToast);
+            toast.show();
+            setTimeout(function () {
+                toast.hide();
+            }, 3000); // Mesajı 3 saniye göster
+        }
+    });
+</script>
